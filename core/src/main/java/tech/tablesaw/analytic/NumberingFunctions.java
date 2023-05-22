@@ -8,18 +8,18 @@ import tech.tablesaw.api.ColumnType;
  *
  * <p>Rank denseRank and rowNumber are examples of analytic mapping functions.
  */
-enum NumberingFunctions implements FunctionMetaData {
+enum NumberingFunctionKinds implements FunctionMetaData {
   ROW_NUMBER(Implementations::rowNumber),
   RANK(Implementations::rank),
   DENSE_RANK(Implementations::denseRank);
 
   private final Supplier<NumberingFunction> supplier;
 
-  NumberingFunctions(Supplier<NumberingFunction> supplier) {
+  NumberingFunctionKinds(Supplier<NumberingFunction> supplier) {
     this.supplier = supplier;
   }
 
-  public NumberingFunction getImplementation() {
+  public NumberingFunctionKinds getImplementation() {
     return supplier.get();
   }
 
@@ -46,9 +46,9 @@ enum NumberingFunctions implements FunctionMetaData {
   /** Implementations. */
   static class Implementations {
 
-    static NumberingFunction rowNumber() {
+    static NumberingFunctionKinds rowNumber() {
 
-      return new NumberingFunction() {
+      return new NumberingFunctionKinds() {
         private int count = 0;
 
         @Override
@@ -68,8 +68,8 @@ enum NumberingFunctions implements FunctionMetaData {
       };
     }
 
-    static NumberingFunction denseRank() {
-      return new NumberingFunction() {
+    static NumberingFunctionKinds denseRank() {
+      return new NumberingFunctionKinds() {
         private int rank = 0;
 
         @Override
@@ -87,9 +87,9 @@ enum NumberingFunctions implements FunctionMetaData {
       };
     }
 
-    static NumberingFunction rank() {
+    static NumberingFunctionKinds rank() {
 
-      return new NumberingFunction() {
+      return new NumberingFunctionKinds() {
         private int rank = 0;
         private int numInPrevRank = 1;
 
