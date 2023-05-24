@@ -15,7 +15,7 @@ enum NumberingFunctionKinds implements FunctionMetaData {
 
   private final Supplier<NumberingFunction> supplier;
 
-  NumberingFunctionKinds(Supplier<NumberingFunction_kinds> supplier) {
+  NumberingFunctionKinds(Supplier<NumberingFunctionKinds> supplier) {
     this.supplier = supplier;
   }
 
