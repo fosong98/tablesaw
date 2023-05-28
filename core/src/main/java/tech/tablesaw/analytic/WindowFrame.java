@@ -121,21 +121,24 @@ final class WindowFrame {
    * Calculate the window growth type. Knowing the growth type simplifies the executing the query.
    */
   WindowGrowthType windowGrowthType() {
-    if (leftBoundType == WindowBoundTypes.UNBOUNDED_PRECEDING
-        && rightBoundType == WindowBoundTypes.UNBOUNDED_FOLLOWING) {
-      return WindowGrowthType.FIXED;
-    } else if ((leftBoundType == WindowBoundTypes.PRECEDING
-            || leftBoundType == WindowBoundTypes.FOLLOWING
-            || leftBoundType == WindowBoundTypes.CURRENT_ROW)
-        && (rightBoundType == WindowBoundTypes.PRECEDING
-            || rightBoundType == WindowBoundTypes.FOLLOWING
-            || rightBoundType == WindowBoundTypes.CURRENT_ROW)) {
-      return WindowGrowthType.SLIDING;
+    switch (leftBoundType) {
+      case UNBOUNDED_PRECEDING:
+        if (rightBoundType == WindowBoundTypes.UNBOUNDED_FOLLOWING) {
+          return WindowGrowthType.FIXED;
+        } else {
+          return WindowGrowthType.FIXED_LEFT;
+        }
+      case PRECEDING:
+      case FOLLOWING:
+      case CURRENT_ROW:
+        if (rightBoundType == WindowBoundTypes.PRECEDING
+             || rightBoundType == WindowBoundTypes.FOLLOWING
+             || rightBoundType == WindowBoundTypes.CURRENT_ROW) {
+          return WindowGrowthType.SLIDING;
+  }
+      default:
+        return WindowGrowthType.FIXED_RIGHT;
     }
-    if (leftBoundType == WindowBoundTypes.UNBOUNDED_PRECEDING) {
-      return WindowGrowthType.FIXED_LEFT;
-    }
-    return WindowGrowthType.FIXED_RIGHT;
   }
 
   @Override
