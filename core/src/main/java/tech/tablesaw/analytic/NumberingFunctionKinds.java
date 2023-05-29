@@ -13,7 +13,7 @@ enum NumberingFunctionKinds implements FunctionMetaData {
   RANK(Implementations::rank),
   DENSE_RANK(Implementations::denseRank);
 
-  private final Supplier<NumberingFunction> supplier;
+  private final Supplier<NumberingFunctionKinds> supplier;
 
   NumberingFunctionKinds(Supplier<NumberingFunctionKinds> supplier) {
     this.supplier = supplier;
