@@ -62,3 +62,13 @@ public class ShortParser extends AbstractColumnParser<Short> {
     return Short.parseShort(AbstractColumnParser.remove(s, ','));
   }
 }
+private [NumberType] parse[Type](String str) {
+        if (isMissing(str)) {
+        return [ColumnType].missingValueIndicator();
+        }
+        String s = str;
+        if (ignoreZeroDecimal) {
+        s = StringUtils.removeZeroDecimal(s);
+        }
+        return [NumberType].parse[Type](AbstractColumnParser.remove(s, ','));
+        }

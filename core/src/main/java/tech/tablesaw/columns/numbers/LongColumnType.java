@@ -13,7 +13,7 @@ public class LongColumnType extends AbstractColumnType {
 
   private static final int BYTE_SIZE = 8;
 
-  private static LongColumnType INSTANCE;
+  private static LongColumnType InstanceNumber;
 
   private LongColumnType(int byteSize, String name, String printerFriendlyName) {
     super(byteSize, name, printerFriendlyName);
@@ -21,10 +21,10 @@ public class LongColumnType extends AbstractColumnType {
 
   /** Returns the singleton instance of LongColumnType */
   public static LongColumnType instance() {
-    if (INSTANCE == null) {
-      INSTANCE = new LongColumnType(BYTE_SIZE, "LONG", "Long");
+    if (InstanceNumber == null) {
+      InstanceNumber = new LongColumnType(BYTE_SIZE, "LONG", "Long");
     }
-    return INSTANCE;
+    return InstanceNumber;
   }
 
   /** {@inheritDoc} */

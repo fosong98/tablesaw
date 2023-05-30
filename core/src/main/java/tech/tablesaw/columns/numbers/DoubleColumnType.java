@@ -13,14 +13,14 @@ public class DoubleColumnType extends AbstractColumnType {
   /** Returns the default parser for DoubleColumn */
   public static final DoubleParser DEFAULT_PARSER = new DoubleParser(ColumnType.DOUBLE);
 
-  private static DoubleColumnType INSTANCE = new DoubleColumnType(BYTE_SIZE, "DOUBLE", "Double");
+  private static DoubleColumnType InstanceNumber = new DoubleColumnType(BYTE_SIZE, "DOUBLE", "Double");
 
   /** Returns the singleton instance of DoubleColumnType */
   public static DoubleColumnType instance() {
-    if (INSTANCE == null) {
-      INSTANCE = new DoubleColumnType(BYTE_SIZE, "DOUBLE", "Double");
+    if (InstanceNumber == null) {
+      InstanceNumber = new DoubleColumnType(BYTE_SIZE, "DOUBLE", "Double");
     }
-    return INSTANCE;
+    return InstanceNumber;
   }
 
   private DoubleColumnType(int byteSize, String name, String printerFriendlyName) {

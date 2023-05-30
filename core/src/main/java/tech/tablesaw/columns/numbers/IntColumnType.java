@@ -13,7 +13,7 @@ public class IntColumnType extends AbstractColumnType {
 
   private static final int BYTE_SIZE = 4;
 
-  private static IntColumnType INSTANCE;
+  private static IntColumnType InstanceNumber;
 
   private IntColumnType(int byteSize, String name, String printerFriendlyName) {
     super(byteSize, name, printerFriendlyName);
@@ -21,10 +21,10 @@ public class IntColumnType extends AbstractColumnType {
 
   /** Returns the singleton instance of IntColumnType */
   public static IntColumnType instance() {
-    if (INSTANCE == null) {
-      INSTANCE = new IntColumnType(BYTE_SIZE, "INTEGER", "Integer");
+    if (InstanceNumber == null) {
+      InstanceNumber = new IntColumnType(BYTE_SIZE, "INTEGER", "Integer");
     }
-    return INSTANCE;
+    return InstanceNumber;
   }
 
   /** {@inheritDoc} */
