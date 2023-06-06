@@ -2,6 +2,7 @@ package tech.tablesaw.columns.strings;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tech.tablesaw.selection.Selection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,6 +97,62 @@ class DictionaryMapTest {
         assertEquals(2, valueToKey.get("unregistered"));
 
         assertEquals(4, values.size());
+    }
+
+    /**
+     * Purpose: verify isNotIn Methods
+     *
+     * Given:
+     * *    value
+     * * 1) registered value(4)
+     * * 2) unregistered value(4)
+     * * 3) mixed value(2, 2)
+     *
+     * When: call two forms of isNotIn methods
+     *
+     * Then:
+     * *    Selection size
+     * * 1) 0
+     * * 2) 4
+     * * 3) 2
+     */
+    @Test
+    public void isNotInTest() throws Exception {
+        // given
+        String registered1 = "registered1";
+        String registered2 = "registered2";
+        String registered3 = "registered3";
+        String registered4 = "registered4";
+        String unregistered1 = "unregistered1";
+        String unregistered2 = "unregistered2";
+        String unregistered3 = "unregistered3";
+        String unregistered4 = "unregistered4";
+
+        List<String> registered = List.of(registered1, registered2, registered3, registered4);
+        List<String> unregistered = List.of(unregistered1, unregistered2, unregistered3, unregistered4);
+        List<String> mixed = List.of(unregistered1, registered2, unregistered3, registered4);
+
+        DictionaryMap<Integer> strings = dictionaryMap;
+        for (String s : registered) {
+            strings.append(s);
+        }
+
+        // when
+        Selection registeredSelectionStrings = dictionaryMap.isNotIn(registered1, registered2, registered3, registered4);
+        Selection registeredSelectionCollection = dictionaryMap.isNotIn(registered);
+        Selection unregisteredSelectionStrings = dictionaryMap.isNotIn(unregistered1, unregistered2, unregistered3, unregistered4);
+        Selection unregisteredSelectionCollection = dictionaryMap.isNotIn(unregistered);
+        Selection mixedSelectionStrings = dictionaryMap.isNotIn(mixed.get(0), mixed.get(1), mixed.get(2) , mixed.get(3));
+        Selection mixedSelectionCollection = dictionaryMap.isNotIn(mixed);
+
+        // then
+        assertEquals(0, registeredSelectionStrings.size());
+        assertEquals(0, registeredSelectionCollection.size());
+        assertEquals(4, unregisteredSelectionStrings.size());
+        assertEquals(4, unregisteredSelectionCollection.size());
+        assertEquals(2, mixedSelectionStrings.size());
+        assertEquals(2, mixedSelectionCollection.size());
+
     }
 }
 
