@@ -103,6 +103,33 @@ public class BitSetBackedSelection implements Selection {
     }
     return bits;
   }
+  
+  /** 
+  * Purpose : To test the toBitmap() method when otherSelection is the kind of type which is included in BitSetBackedSelection.
+  * Given : otherSelection is from BitSetBackedSelection plus some other elements.
+  * When : The toBitmap() method is called with otherSelection as the input
+  * Then : - The clone is copied from the bitmap which is from otherSelection, and it is returned
+           - The bitmap which is returned should be same as otherSelection's 
+           - The newly returned bitmap should have a separate instance from otherSelection's
+  */
+  
+  @Test
+  public void testToBitmap_WithBitSetBackedSelection() {
+   //Purpose : To test the toBitmap() method when otherSelection is the kind of type which is included in BitSetBackedSelection.
+    
+    //Given : otherSelection is from BitSetBackedSelection plus some other elements.
+    BitSetBackedSelection otherSelection = new BitSetBackedSelection();
+    otherSelection.add(1);
+    otherSelection.add(3);
+    
+    // When : The toBitmap() method is called with otherSelection as the input
+    BitSet result = toBitmap(otherSelection);
+    
+    //Assert
+    assertEquals(otherSelection.bitmap, result);
+    assertNotSame(otherSelection.bitmap, result);
+  }
+  
 
   /** Intersects the receiver and {@code otherSelection}, updating the receiver */
   @Override
