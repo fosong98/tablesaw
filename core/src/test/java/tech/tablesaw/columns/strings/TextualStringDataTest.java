@@ -258,4 +258,59 @@ class TextualStringDataTest {
         assertEquals("7", count.getString("Value"));
         assertEquals("2", missing.getString("Value"));
     }
+
+    /**
+     * Purpose: Verify lag method to apply boundary value analysis
+     *
+     * Given:
+     * * initial data {"a", "b", "c", "d", "e"}
+     *
+     * When:
+     * * boundary 1. n >= 0
+     * * 1) n = 0
+     * * 2) n = -1
+     * * boundary 2. i + n >= dataSize (initial i is 0)
+     * * 3) n = dataSize
+     * * 4) n = dataSize - 1
+     * * boundary 3. i < dataSize (initial i is -n)
+     * * 5) n = -dataSize
+     * * 6) n = -(dataSize - 1)
+     *
+     * Then:
+     * * 1) {"a", "b", "c", "d", "e"}
+     * * 2) {"b", "c", "d", "e", ""}
+     * * 3) {"", "", "", "", ""}
+     * * 4) {"", "", "", "", "a"}
+     * * 5) {"", "", "", "", ""}
+     * * 6) {"e", "", "", "", ""}
+     */
+    @Test
+    public void lagTest() {
+        // given
+        List<String> initData = List.of("a", "b", "c", "d", "e");
+        TextualStringData data = TextualStringData.create(initData);
+
+        List<String> case1 = initData;
+        List<String> case2 = List.of("b", "c", "d", "e", "");
+        List<String> case3 = List.of("", "", "", "", "");
+        List<String> case4 = List.of("", "", "", "", "a");
+        List<String> case5 = case3;
+        List<String> case6 = List.of("e", "", "", "", "");
+
+        // when
+        TextualStringData lag1 = data.lag(0);
+        TextualStringData lag2 = data.lag(-1);
+        TextualStringData lag3 = data.lag(data.size());
+        TextualStringData lag4 = data.lag(data.size() - 1);
+        TextualStringData lag5 = data.lag(-1 * data.size());
+        TextualStringData lag6 = data.lag(-1 * (data.size() - 1));
+
+        // then
+        assertIterableEquals(case1, lag1);
+        assertIterableEquals(case2, lag2);
+        assertIterableEquals(case3, lag3);
+        assertIterableEquals(case4, lag4);
+        assertIterableEquals(case5, lag5);
+        assertIterableEquals(case6, lag6);
+    }
 }
