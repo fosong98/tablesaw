@@ -1,15 +1,12 @@
 package tech.tablesaw.columns.strings;
 
-import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2IntOpenHashMap;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.ShortArrayList;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 /** A map that supports reversible key value pairs of short-String */
 public class ShortDictionaryMap extends DictionaryMap<Short> {
