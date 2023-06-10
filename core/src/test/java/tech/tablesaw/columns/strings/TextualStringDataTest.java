@@ -3,7 +3,10 @@ package tech.tablesaw.columns.strings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
+import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
 
 import java.lang.reflect.Constructor;
@@ -224,5 +227,35 @@ class TextualStringDataTest {
         assertIterableEquals(expectedIsIn, isInList);
         assertIterableEquals(expectedIsNotIn, isNotInArray);
         assertIterableEquals(expectedIsNotIn, isNotInList);
+    }
+
+    /**
+     * Purpose: Verify summary method
+     *
+     * Given:
+     * * initial data with 2 missing values and 5 values
+     * * {"", "a", "b", "", "c", "d", "e"}
+     *
+     * When:
+     * * Call summary method
+     *
+     * Then:
+     * * Return Table with the number of missing values(2) and the number of values(7).
+     */
+    @Test
+    public void summaryTest() {
+        // given
+        List<String> initData = List.of("", "a", "b", "", "c", "d", "e");
+        TextualStringData data = TextualStringData.create(initData);
+
+        // when
+        Table summary = data.summary();
+
+        // then
+        Row count = summary.row(0);
+        Row missing = summary.row(1);
+
+        assertEquals("7", count.getString("Value"));
+        assertEquals("2", missing.getString("Value"));
     }
 }
