@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import tech.tablesaw.api.StringColumn;
+import tech.tablesaw.selection.Selection;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -186,4 +187,42 @@ class TextualStringDataTest {
         assertIterableEquals(initData, copy);
     }
 
+    /**
+     * Purpose: verify isIn and isNotIn method
+     *
+     * Given:
+     * * initial data {"a", "b", "c", "d", "e"}
+     * * query data {"a", "c", "e", "f"}
+     *
+     * When:
+     * * 1) Call isIn method as array
+     * * 2) Call isNotIn method as array
+     * * 3) Call isIn method as list
+     * * 4) Call isNotIn method as list
+     *
+     * Then:
+     * * isIn: Return the index of values in the list
+     * * isNotIn: Return the index of unlisted values
+     */
+    @Test
+    public void queryTest() {
+        // given
+        List<String> initData = List.of("a", "b", "c", "d", "e");
+        TextualStringData data = TextualStringData.create(initData);
+        String[] queryStrings = {"a", "c", "e", "f"};
+        List<Integer> expectedIsIn = List.of(0, 2, 4);
+        List<Integer> expectedIsNotIn = List.of(1, 3);
+
+        // when
+        Selection isInArray = data.isIn(queryStrings);
+        Selection isNotInArray = data.isNotIn(queryStrings);
+        Selection isInList = data.isIn(List.of(queryStrings));
+        Selection isNotInList = data.isNotIn(List.of(queryStrings));
+
+        // then
+        assertIterableEquals(expectedIsIn, isInArray);
+        assertIterableEquals(expectedIsIn, isInList);
+        assertIterableEquals(expectedIsNotIn, isNotInArray);
+        assertIterableEquals(expectedIsNotIn, isNotInList);
+    }
 }
