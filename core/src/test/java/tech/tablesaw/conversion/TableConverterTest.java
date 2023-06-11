@@ -14,12 +14,17 @@
 
 package tech.tablesaw.conversion;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Arrays;
 import org.junit.jupiter.api.Test;
-import tech.tablesaw.api.DoubleColumn;
-import tech.tablesaw.api.Table;
+import tech.tablesaw.api.*;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TableConverterTest {
 
@@ -111,5 +116,47 @@ public class TableConverterTest {
     float[][] expected = {{0.0f, 0.0f}, {1.0f, 1.0f}, {1.0f, 3.0f}};
     float[][] results = table.as().floatMatrix("1", "3");
     assertTrue(Arrays.deepEquals(expected, results));
+  }
+
+  /**
+   * Purpose: Test the conversion of List<NumericColumn<?>> to double[][] in doubleMatrix() method
+   * Given: Sample NumericColumns
+   * When: Calling doubleMatrix() method with the sample NumericColumns
+   * Then: Check the conversion of List<NumericColumn<?>> to double[][]
+   **/
+  @Test
+  public void testDoubleMatrix() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    // Purpose: Test the conversion of List<NumericColumn<?>> to double[][] in doubleMatrix() method
+
+    // Given: Sample NumericColumns
+    NumericColumn<Integer> column1 = IntColumn.create("IntColumn", 1, 2, 3);
+    NumericColumn<Double> column2 = DoubleColumn.create("DoubleColumn", 4.5, 6.7, 8.9);
+    NumericColumn<Float> column3 = FloatColumn.create("FloatColumn", 0.1f, 0.2f, 0.3f);
+    List<NumericColumn<?>> numberColumns = new ArrayList<>();
+    numberColumns.add(column1);
+    numberColumns.add(column2);
+    numberColumns.add(column3);
+
+    // When: Calling doubleMatrix() method with the sample NumericColumns
+    Method doubleMatrix = TableConverter.class.getDeclaredMethod("doubleMatrix", List.class);
+    doubleMatrix.setAccessible(true);
+    double[][] result = (double[][]) doubleMatrix.invoke(new TableConverter(null), numberColumns);
+
+    // Then: Check the conversion of List<NumericColumn<?>> to double[][]
+    assertEquals(3, result.length); // Number of rows should be 3
+    assertEquals(3, result[0].length); // Number of columns should be 3
+
+    // Check the values in the double[][] array
+    assertEquals(1.0, result[0][0], 0.001);
+    assertEquals(4.5, result[0][1], 0.001);
+    assertEquals(0.1, result[0][2], 0.001);
+
+    assertEquals(2.0, result[1][0], 0.001);
+    assertEquals(6.7, result[1][1], 0.001);
+    assertEquals(0.2, result[1][2], 0.001);
+
+    assertEquals(3.0, result[2][0], 0.001);
+    assertEquals(8.9, result[2][1], 0.001);
+    assertEquals(0.3, result[2][2], 0.001);
   }
 }
