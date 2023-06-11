@@ -10,17 +10,17 @@ public class ShortColumnType extends AbstractColumnType {
 
   private static final int BYTE_SIZE = 2;
 
-  private static ShortColumnType InstanceNumber;
+  private static ShortColumnType INSTANCE;
 
   private ShortColumnType(int byteSize, String name, String printerFriendlyName) {
     super(byteSize, name, printerFriendlyName);
   }
 
   public static ShortColumnType instance() {
-    if (InstanceNumber == null) {
-      InstanceNumber = new ShortColumnType(BYTE_SIZE, "SHORT", "Short");
+    if (INSTANCE == null) {
+      INSTANCE = new ShortColumnType(BYTE_SIZE, "SHORT", "Short");
     }
-    return InstanceNumber;
+    return INSTANCE;
   }
 
   @Override
