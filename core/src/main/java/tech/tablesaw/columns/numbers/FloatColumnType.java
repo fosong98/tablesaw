@@ -13,7 +13,7 @@ public class FloatColumnType extends AbstractColumnType {
   /** Returns the default parser for {@link FloatColumn} */
   public static final FloatParser DEFAULT_PARSER = new FloatParser(ColumnType.FLOAT);
 
-  private static FloatColumnType InstanceNumber;
+  private static FloatColumnType INSTANCE;
 
   private FloatColumnType(int byteSize, String name, String printerFriendlyName) {
     super(byteSize, name, printerFriendlyName);
@@ -21,10 +21,10 @@ public class FloatColumnType extends AbstractColumnType {
 
   /** Returns the singleton instance of FloatColumnType */
   public static FloatColumnType instance() {
-    if (InstanceNumber == null) {
-      InstanceNumber = new FloatColumnType(BYTE_SIZE, "FLOAT", "float");
+    if (INSTANCE == null) {
+      INSTANCE = new FloatColumnType(BYTE_SIZE, "FLOAT", "float");
     }
-    return InstanceNumber;
+    return INSTANCE;
   }
 
   /** {@inheritDoc} */

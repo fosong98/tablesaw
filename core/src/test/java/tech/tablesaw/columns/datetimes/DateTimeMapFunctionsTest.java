@@ -12,100 +12,273 @@
  * limitations under the License.
  */
 
-package tech.tablesaw.columns.dates;
+package tech.tablesaw.columns.datetimes;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalTime;
-import org.junit.jupiter.api.BeforeEach;
+import com.google.common.base.Strings;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 import org.junit.jupiter.api.Test;
 import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.DateTimeColumn;
-import tech.tablesaw.api.Table;
+import tech.tablesaw.api.IntColumn;
+import tech.tablesaw.api.LongColumn;
+import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.TimeColumn;
 
-public class DateMapFunctionsTest {
+/** Tests for DateTimeMapFunctions */
+public class DateTimeMapFunctionsTest {
 
-  private DateColumn column1;
+  private DateTimeColumn startCol = DateTimeColumn.create("start");
+  private DateTimeColumn stopCol = DateTimeColumn.create("stop");
+  private LocalDateTime start = LocalDateTime.now();
 
-  @BeforeEach
-  public void setUp() {
-    Table table = Table.create("Test");
-    column1 = DateColumn.create("Game date");
-    table.addColumns(column1);
+  @Test
+  public void testDifferenceInMilliseconds() {
+    LocalDateTime stop = start.plus(100_000L, ChronoUnit.MILLIS);
+    startCol.append(start);
+    stopCol.append(stop);
+    LongColumn result = startCol.differenceInMilliseconds(stopCol);
+    assertEquals(100_000L, result.getLong(0), 0.01);
   }
 
   @Test
-  public void testAtTimeColumn() {
-    column1.appendCell("2023-06-10");
-    column1.appendCell("06/10/2023");
-    column1.appendCell("10-jan-2023");
-    column1.appendCell("10-feb-2023");
-    column1.appendCell("10-mar-2023");
-    column1.appendCell("10-apr-2023");
-    column1.appendCell("10-may-2023");
-    column1.appendCell("10-jun-2023");
-    column1.appendCell("10-jul-2023");
-    column1.appendCell("10-aug-2023");
-    column1.appendCell("10-sep-2023");
-    column1.appendCell("10-oct-2023");
-    column1.appendCell("10-nov-2023");
-    column1.appendCell("10-dec-2023");
-    column1.appendCell("10-JAN-2023");
-    column1.appendCell("10-FEB-2023");
-    column1.appendCell("10-MAR-2023");
-    column1.appendCell("10-APR-2023");
-    column1.appendCell("10-MAY-2023");
-    column1.appendCell("10-JUN-2023");
-    column1.appendCell("10-JUL-2023");
-    column1.appendCell("10-AUG-2023");
-    column1.appendCell("10-SEP-2023");
-    column1.appendCell("10-OCT-2023");
-    column1.appendCell("10-NOV-2023");
-    column1.appendCell("10-DEC-2023");
+  public void testDifferenceInSeconds() {
+    LocalDateTime stop = start.plus(100_000L, ChronoUnit.SECONDS);
 
-    TimeColumn timeColumn = TimeColumn.create("times");
-    timeColumn.append(LocalTime.NOON);
-    timeColumn.append(LocalTime.NOON);
-    timeColumn.append(LocalTime.NOON);
-    timeColumn.append(LocalTime.NOON);
-    DateTimeColumn dateTimes = column1.atTime(timeColumn);
-    assertNotNull(dateTimes);
-    assertTrue(dateTimes.get(0).toLocalTime().equals(LocalTime.NOON));
+    startCol.append(start);
+    stopCol.append(stop);
+
+    LongColumn result = startCol.differenceInSeconds(stopCol);
+    assertEquals(100_000L, result.getLong(0), 0.01);
   }
 
   @Test
-  public void testAtTime() {
-    column1.appendCell("2023-06-10");
-    column1.appendCell("06/10/2023");
-    column1.appendCell("10-jan-2023");
-    column1.appendCell("10-feb-2023");
-    column1.appendCell("10-mar-2023");
-    column1.appendCell("10-apr-2023");
-    column1.appendCell("10-may-2023");
-    column1.appendCell("10-jun-2023");
-    column1.appendCell("10-jul-2023");
-    column1.appendCell("10-aug-2023");
-    column1.appendCell("10-sep-2023");
-    column1.appendCell("10-oct-2023");
-    column1.appendCell("10-nov-2023");
-    column1.appendCell("10-dec-2023");
-    column1.appendCell("10-JAN-2023");
-    column1.appendCell("10-FEB-2023");
-    column1.appendCell("10-MAR-2023");
-    column1.appendCell("10-APR-2023");
-    column1.appendCell("10-MAY-2023");
-    column1.appendCell("10-JUN-2023");
-    column1.appendCell("10-JUL-2023");
-    column1.appendCell("10-AUG-2023");
-    column1.appendCell("10-SEP-2023");
-    column1.appendCell("10-OCT-2023");
-    column1.appendCell("10-NOV-2023");
-    column1.appendCell("10-DEC-2023");;
+  public void testDifferenceInMinutes() {
+    LocalDateTime stop = start.plus(100_000L, ChronoUnit.MINUTES);
 
-    DateTimeColumn dateTimes = column1.atTime(LocalTime.NOON);
-    assertNotNull(dateTimes);
-    assertTrue(dateTimes.get(0).toLocalTime().equals(LocalTime.NOON));
+    startCol.append(start);
+    stopCol.append(stop);
+
+    LongColumn result = startCol.differenceInMinutes(stopCol);
+    assertEquals(100_000L, result.getLong(0), 0.01);
+  }
+
+  @Test
+  public void testDifferenceInHours() {
+    LocalDateTime stop = start.plus(100_000L, ChronoUnit.HOURS);
+
+    startCol.append(start);
+    stopCol.append(stop);
+
+    LongColumn result = startCol.differenceInHours(stopCol);
+    assertEquals(100_000L, result.getLong(0), 0.01);
+  }
+
+  @Test
+  public void testDifferenceInDays() {
+    LocalDateTime stop = start.plus(100_000L, ChronoUnit.DAYS);
+
+    startCol.append(start);
+    stopCol.append(stop);
+
+    LongColumn result = startCol.differenceInDays(stopCol);
+    assertEquals(100_000L, result.getLong(0), 0.01);
+  }
+
+  @Test
+  public void testDifferenceInYears() {
+
+    LocalDateTime stop = start.plus(10_000L, ChronoUnit.YEARS);
+    startCol.append(start);
+    stopCol.append(stop);
+
+    LongColumn result = startCol.differenceInYears(stopCol);
+    assertEquals(10_000L, result.getLong(0), 0.01);
+  }
+
+  @Test
+  public void testHour() {
+    startCol.append(LocalDateTime.of(1984, 12, 12, 7, 30));
+    IntColumn hour = startCol.hour();
+    assertEquals(7, hour.getInt(0), 0.0001);
+  }
+
+  @Test
+  public void testYear() {
+    startCol.append(LocalDateTime.of(1984, 12, 12, 7, 30));
+    IntColumn year = startCol.year();
+    assertEquals(1984, year.getInt(0), 0.0001);
+  }
+
+  @Test
+  public void testDayOfYear() {
+    startCol.append(LocalDateTime.of(1984, 1, 5, 7, 30));
+    IntColumn dayOfYear = startCol.dayOfYear();
+    assertEquals(5, dayOfYear.getInt(0), 0.0001);
+  }
+
+  @Test
+  public void testDayOfMonth() {
+    startCol.append(LocalDateTime.of(1984, 1, 22, 7, 30));
+    IntColumn dayOfMonth = startCol.dayOfMonth();
+    assertEquals(22, dayOfMonth.getInt(0), 0.0001);
+  }
+
+  @Test
+  public void testMinute() {
+    startCol.append(LocalDateTime.of(1984, 1, 22, 7, 30));
+    IntColumn minute = startCol.minute();
+    assertEquals(30, minute.getInt(0), 0.0001);
+  }
+
+  @Test
+  public void testDayOfWeekValue() {
+    startCol.append(LocalDateTime.of(2018, 4, 10, 7, 30));
+    IntColumn dayOfWeekValue = startCol.dayOfWeekValue();
+    assertEquals(2, dayOfWeekValue.getInt(0), 0.0001);
+  }
+
+  @Test
+  public void testDayOfWeek() {
+    startCol.append(LocalDateTime.of(2018, 4, 10, 7, 30));
+    StringColumn dayOfWeek = startCol.dayOfWeek();
+    assertEquals("TUESDAY", dayOfWeek.get(0));
+  }
+
+  @Test
+  public void testHourMinute() {
+    startCol.append(LocalDateTime.of(2018, 4, 10, 7, 30));
+    StringColumn hourMinute = startCol.hourMinute();
+    assertEquals("07:30", hourMinute.get(0));
+  }
+
+  @Test
+  public void testYearMonth() {
+    startCol.append(LocalDateTime.of(2018, 4, 10, 7, 30));
+    StringColumn yearMonth = startCol.yearMonth();
+    assertEquals("2018-04", yearMonth.get(0));
+  }
+
+  @Test
+  public void testYearDay() {
+    LocalDateTime dateTime = LocalDateTime.of(2018, 4, 10, 7, 30);
+    startCol.append(dateTime);
+    StringColumn yearDay = startCol.yearDay();
+    assertEquals(
+        "2018-" + Strings.padStart(String.valueOf(dateTime.getDayOfYear()), 3, '0'),
+        yearDay.get(0));
+  }
+
+  @Test
+  public void testYearWeek() {
+    LocalDateTime dateTime = LocalDateTime.of(2018, 4, 10, 7, 30);
+    startCol.append(dateTime);
+    StringColumn yearWeek = startCol.yearWeek();
+    TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+    assertEquals(
+        "2018-" + Strings.padStart(String.valueOf(dateTime.get(woy)), 2, '0'), yearWeek.get(0));
+  }
+
+  @Test
+  public void testYearQuarter() {
+    LocalDateTime dateTime = LocalDateTime.of(2018, 4, 10, 7, 30);
+    startCol.append(dateTime);
+    StringColumn yearQuarter = startCol.yearQuarter();
+    assertEquals("2018-2", yearQuarter.get(0));
+  }
+
+  @Test
+  public void testMonth() {
+    LocalDateTime dateTime = LocalDateTime.of(2018, 4, 10, 7, 30);
+    startCol.append(dateTime);
+    StringColumn month = startCol.month();
+    assertEquals("APRIL", month.get(0));
+  }
+
+  @Test
+  public void testMonthValue() {
+    LocalDateTime dateTime = LocalDateTime.of(2018, 4, 10, 7, 30);
+    startCol.append(dateTime);
+    IntColumn month = startCol.monthValue();
+    assertEquals(4, month.get(0), 0.0001);
+  }
+
+  @Test
+  public void testMinuteOfDay() {
+    LocalDateTime dateTime = LocalDateTime.of(2018, 4, 10, 7, 30);
+    startCol.append(dateTime);
+    IntColumn minuteOfDay = startCol.minuteOfDay();
+    assertEquals((7 * 60) + 30, minuteOfDay.get(0), 0.0001);
+  }
+
+  @Test
+  public void testSecondOfDay() {
+    LocalDateTime dateTime = LocalDateTime.of(2018, 4, 10, 7, 30);
+    startCol.append(dateTime);
+    IntColumn secondOfDay = startCol.secondOfDay();
+    assertEquals(dateTime.get(ChronoField.SECOND_OF_DAY), secondOfDay.get(0), 0.0001);
+  }
+
+  @Test
+  public void testDate() {
+    LocalDateTime dateTime = LocalDateTime.of(2018, 4, 10, 7, 30);
+    startCol.append(dateTime);
+    DateColumn date = startCol.date();
+    assertEquals(dateTime.toLocalDate(), date.get(0));
+  }
+
+  @Test
+  public void testTime() {
+    LocalDateTime dateTime = LocalDateTime.of(2018, 4, 10, 7, 30);
+    startCol.append(dateTime);
+    TimeColumn time = startCol.time();
+    assertEquals(dateTime.toLocalTime(), time.get(0));
+  }
+
+  @Test
+  public void testTimeWindow() {
+    LocalDateTime dateTime = LocalDateTime.of(2018, 4, 10, 7, 30);
+    startCol.append(dateTime);
+    for (int i = 0; i < 49; i++) {
+      dateTime = dateTime.plusDays(1);
+      startCol.append(dateTime);
+    }
+    LongColumn timeWindows = startCol.timeWindow(ChronoUnit.DAYS, 5);
+    assertEquals(0, timeWindows.get(0), 0.0001);
+    assertEquals(9, timeWindows.max(), 0.0001);
+
+    timeWindows = startCol.timeWindow(ChronoUnit.WEEKS, 1);
+    assertEquals(0, timeWindows.get(0), 0.0001);
+    assertEquals(7, timeWindows.max(), 0.0001);
+
+    timeWindows = startCol.timeWindow(ChronoUnit.MONTHS, 1);
+    assertEquals(0, timeWindows.get(0), 0.0001);
+    assertEquals(1, timeWindows.max(), 0.0001);
+
+    timeWindows = startCol.timeWindow(ChronoUnit.YEARS, 1);
+    assertEquals(0, timeWindows.get(0), 0.0001);
+    assertEquals(0, timeWindows.max(), 0.0001);
+  }
+
+  @Test
+  public void testLeadAndLag() {
+    LocalDateTime dateTime1 = LocalDateTime.of(2018, 4, 10, 7, 30);
+    LocalDateTime dateTime2 = LocalDateTime.of(2018, 5, 10, 7, 30);
+    LocalDateTime dateTime3 = LocalDateTime.of(2018, 5, 10, 7, 30);
+    startCol.append(dateTime1);
+    startCol.append(dateTime2);
+    startCol.append(dateTime3);
+    DateTimeColumn lead = startCol.lead(1);
+    DateTimeColumn lag = startCol.lag(1);
+    assertEquals(startCol.get(0), lag.get(1));
+    assertEquals(DateTimeColumnType.missingValueIndicator(), lag.getLongInternal(0));
+    assertEquals(startCol.get(1), lead.get(0));
+    assertEquals(DateTimeColumnType.missingValueIndicator(), lead.getLongInternal(2));
   }
 }
